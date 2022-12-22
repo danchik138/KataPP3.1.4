@@ -9,7 +9,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import ru.kata.spring.boot_security.demo.entities.Role;
+import ru.kata.spring.boot_security.demo.entities.User;
 import ru.kata.spring.boot_security.demo.services.UserService;
+
+import java.util.HashSet;
 
 @Configuration
 @EnableWebSecurity
@@ -53,6 +57,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         authenticationProvider.setUserDetailsService(userService);
+        setupBaseAdmin();
         return authenticationProvider;
+    }
+
+    private void setupBaseAdmin() {
+        User admin = new User();
+        admin.setUsername("admin");
+        admin.setPassword("$2a$12$FKryineLgp9rqaWbPgzsfOB9i8pONHz10lI2XddH63fba5NwA.X3G");
+        admin.setEmail("admin@ad.min");
+        HashSet<Role> roles = new HashSet<>();
+        roles.add(new Role("ROLE_ADMIN"));
+        roles.add(new Role("ROLE_USER"));
+        admin.setRoles(roles);
+        userService.saveUser(admin);
     }
 }
