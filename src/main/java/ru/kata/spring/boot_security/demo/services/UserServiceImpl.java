@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.services;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,18 +28,42 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User findByUserName(String username) {
-        return userRepository.findByUsername(username);
+    public User findByLogin(String username) {
+        return userRepository.findByLogin(username);
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = findByUserName(username);
-        System.out.println(user);
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public User findByLoginOrEmail(String loginOrEmail) throws UsernameNotFoundException {
+        User user;
+        user = userRepository.findByLogin(loginOrEmail);
+        if (user == null) {
+            user = userRepository.findByEmail(loginOrEmail);
+        }
+        return user;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String nameOrEmail) throws UsernameNotFoundException {
+        User user = findByLogin(nameOrEmail);
+        if (user != null) {
+            user.setUserDetailsName(user.getUsername());
+        } else {
+            user = findByEmail(nameOrEmail);
+            if (user != null) {
+                user.setUserDetailsName(user.getEmail());
+            }
+        }
         if (user == null) {
             throw new UsernameNotFoundException(
-                    String.format("User '%s' not found", username));
+                    "No user with uch name or email: " + nameOrEmail
+            );
         }
+        Hibernate.initialize(user.getRoles());
         return user;
     }
 
@@ -73,5 +98,10 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<User> getAllUsersList() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public List<Long> getAllIds() {
+        return userRepository .getAllIds();
     }
 }

@@ -14,7 +14,7 @@ public class Role implements GrantedAuthority {
     @Column(name = "id")
     private long id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
     @Override
     public String getAuthority() {
@@ -31,6 +31,14 @@ public class Role implements GrantedAuthority {
 
     public String getName() {
         return name;
+    }
+
+    public String getShortName() {
+        if (name != null && name.length() > 5) {
+            return name.substring(5);
+        } else {
+            return "no_role";
+        }
     }
 
     public void setName(String name) {

@@ -58,18 +58,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         authenticationProvider.setUserDetailsService(userService);
         setupBaseAdmin();
+        setupBaseUser();
         return authenticationProvider;
     }
 
     private void setupBaseAdmin() {
         User admin = new User();
-        admin.setUsername("admin");
-        admin.setPassword("$2a$12$FKryineLgp9rqaWbPgzsfOB9i8pONHz10lI2XddH63fba5NwA.X3G");
-        admin.setEmail("admin@ad.min");
+        admin.setLogin("admin");
+        admin.setPassword("$2a$12$FKryineLgp9rqaWbPgzsfOB9i8pONHz10lI2XddH63fba5NwA.X3G"); //decrypt : admin
+        admin.setEmail("admin@mail.ru");
         HashSet<Role> roles = new HashSet<>();
         roles.add(new Role("ROLE_ADMIN"));
         roles.add(new Role("ROLE_USER"));
         admin.setRoles(roles);
         userService.saveUser(admin);
+    }
+
+    private void setupBaseUser() {
+        User user = new User();
+        user.setLogin("user");
+        user.setPassword("$2a$12$H.yw8MmZLJrWylntiqPWu.sKu0TWAbNJyb0R38iwZeOARyrvrOj6q"); //decrypt : user
+        user.setEmail("user@mail.ru");
+        HashSet<Role> roles = new HashSet<>();
+        roles.add(new Role("ROLE_USER"));
+        user.setRoles(roles);
+        userService.saveUser(user);
     }
 }

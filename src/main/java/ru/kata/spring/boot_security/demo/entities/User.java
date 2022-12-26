@@ -15,15 +15,26 @@ public class User implements UserDetails {
     @Column(name = "id")
     private long id;
 
-    @Column(name = "username")
-    private String username;
+    @Column(name = "login", unique = true, nullable = false)
+    private String login;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "firstName")
+    private String firstName;
+
+    @Column(name = "lastName")
+    private String lastName;
+
+    @Column(name = "age")
+    private int age;
+
+    @Transient
+    private String userDetailsName;
     @ManyToMany
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -42,7 +53,10 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        if (userDetailsName == null) {
+            return login;
+        }
+        return userDetailsName;
     }
 
     @Override
@@ -73,8 +87,12 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getEmail() {
@@ -89,6 +107,38 @@ public class User implements UserDetails {
         this.password = password;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getUserDetailsName() {
+        return userDetailsName;
+    }
+
+    public void setUserDetailsName(String userDetailsName) {
+        this.userDetailsName = userDetailsName;
+    }
+
     public Collection<Role> getRoles() {
         return roles;
     }
@@ -100,29 +150,41 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String username, String email, String password, Collection<Role> roles) {
-        this.username = username;
+    public User(String login, String email, String password, String firstName, String lastName, int age, String userDetailsName, Collection<Role> roles) {
+        this.login = login;
         this.email = email;
         this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.userDetailsName = userDetailsName;
         this.roles = roles;
     }
 
-    public User(long id, String username, String email, String password, Collection<Role> roles) {
+    public User(long id, String login, String email, String password, String firstName, String lastName, int age, String userDetailsName, Collection<Role> roles) {
         this.id = id;
-        this.username = username;
+        this.login = login;
         this.email = email;
         this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.userDetailsName = userDetailsName;
         this.roles = roles;
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "\nid=" + id +
-                ",\nusername='" + username + '\'' +
-                ",\nemail='" + email + '\'' +
-                ",\npassword='" + password + '\'' +
-                ",\nroles=" + roles +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", age=" + age +
+                ", userDetailsName='" + userDetailsName + '\'' +
+                ", roles=" + roles +
                 '}';
     }
 }

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<h1>Welcome to User page!</h1>
+<table>
+  <tr>
+    <td>Id</td>
+    <td>Login</td>
+    <td>Email</td>
+    <td>First name</td>
+    <td>Last name</td>
+    <td>Age</td>
+    <td>Roles</td>
+  </tr>
+  <tr>
+    <td th:text="${user.getId()}"></td>
+    <td th:text="${user.getLogin()}"></td>
+    <td th:text="${user.getEmail()}"></td>
+    <td th:text="${user.getFirstName()}"></td>
+    <td th:text="${user.getLastName()}"></td>
+    <td th:text="${user.getAge()}"></td>
+    <td>
+      <th:block th:each="role : ${user.getRoles()}">
+        <span th:text="${role.getShortName()}"></span>
+        <span> </span>
+      </th:block>
+    </td>
+  </tr>
+</table>
+<div>
+  <form th:method="post" th:action="@{../logout}">
+    <input type="submit" value="Logout">
+  </form>
+</div>
+<br>
+<a href="../admin">Go to admin page</a>
+</body>
+</html>

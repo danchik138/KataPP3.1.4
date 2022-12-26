@@ -12,7 +12,14 @@ import java.util.List;
 @Service
 public interface UserService extends UserDetailsService {
     @Transactional
-    User findByUserName(String username);
+    User findByLogin(String username) throws UsernameNotFoundException;
+
+    @Transactional
+    User findByEmail(String email) throws UsernameNotFoundException;
+
+    @Transactional
+    User findByLoginOrEmail(String loginOrEmail) throws UsernameNotFoundException;
+
     @Override
     @Transactional
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
@@ -34,4 +41,7 @@ public interface UserService extends UserDetailsService {
 
     @Transactional
     List<User> getAllUsersList();
+
+    @Transactional
+    List<Long> getAllIds();
 }
