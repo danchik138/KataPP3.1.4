@@ -33,6 +33,8 @@ public class AdminController {
     public String mainAdminPage(Model model){
         model.addAttribute("users", userService.getAllUsersList());
         User user = new User();
+        User current = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        model.addAttribute("currentUser", current);
         model.addAttribute("user", user);
         model.addAttribute("ids", userService.getAllIds());
         return "admin/main";
@@ -65,6 +67,7 @@ public class AdminController {
     @PatchMapping("/update")
     public String updateUser(@ModelAttribute("user") User user, @RequestParam("role") String role) {
         user.setRoles(createRoles(role));
+        System.out.println(user);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.updateUser(user);
         if (((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId()==user.getId()) {
