@@ -89,28 +89,34 @@
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <form th:method="patch" th:action="@{/admin/update}" th:object="${user}" autocomplete="off" th:id="${'updateForm' + currentUser.getId()}">
-                                                                <label class="d-block">ID
-                                                                    <input  th:value="${currentUser.id}" type="number" disabled class="form-control"></label>
-                                                                <input th:name="id" th:value="${currentUser.id}" th:errorclass="fieldError" type="hidden">
-                                                                <label class="form-label">Login
-                                                                    <input th:name="login" th:value="${currentUser.login}" th:errorclass="fieldError" required="" type="text" class="form-control"></label>
-                                                                <label class="form-label">Email
-                                                                    <input th:name="email" th:value="${currentUser.email}" th:errorclass="fieldError" required="" type="email" class="form-control"></label>
-                                                                <label class="form-label">First Name
-                                                                    <input th:name="firstName" th:value="${currentUser.firstName}" th:errorclass="fieldError" type="text" class="form-control"></label>
-                                                                <label class="form-label">Last Name
-                                                                    <input th:name="lastName" th:value="${currentUser.lastName}" th:errorclass="fieldError" type="text" class="form-control"></label>
-                                                                <label class="form-label">Age
-                                                                    <input th:name="age" min="0" max="127" th:value="${currentUser.age}" th:errorclass="fieldError" type="number" class="form-control"></label>
-                                                                <label class="form-label">Password
-                                                                    <input th:name="password" type="text" class="form-control" th:errorclass="fieldError" placeholder="type new password"></label>
-                                                                <label class="form-label">Role
-                                                                    <select size="2" multiple required class="form-select" aria-label="Default select" name="role">
-                                                                        <option value="ROLE_ADMIN">ADMIN</option>
-                                                                        <option value="ROLE_USER" selected="selected">USER</option>
-                                                                    </select></label>
-                                                            </form>
+                                                            <div class="row">
+                                                                <div class="col3"></div>
+                                                                <div class="col6">
+                                                                    <form th:method="patch" th:action="@{/admin/update}" th:object="${user}" autocomplete="off" th:id="${'updateForm' + currentUser.getId()}">
+                                                                        <label class="form-label d-block text-center fw-bold">ID
+                                                                            <input  th:value="${currentUser.id}" type="number" disabled class="form-control"></label>
+                                                                        <input th:name="id" th:value="${currentUser.id}" th:errorclass="fieldError" type="hidden">
+                                                                        <label class="form-label d-block text-center fw-bold">Login
+                                                                            <input th:name="login" th:value="${currentUser.login}" th:errorclass="fieldError" required type="text" class="form-control"></label>
+                                                                        <label class="form-label d-block text-center fw-bold">Email
+                                                                            <input th:name="email" th:value="${currentUser.email}" th:errorclass="fieldError" required type="email" class="form-control"></label>
+                                                                        <label class="form-label d-block text-center fw-bold">First Name
+                                                                            <input th:name="firstName" th:value="${currentUser.firstName}" th:errorclass="fieldError" type="text" class="form-control"></label>
+                                                                        <label class="form-label d-block text-center fw-bold">Last Name
+                                                                            <input th:name="lastName" th:value="${currentUser.lastName}" th:errorclass="fieldError" type="text" class="form-control"></label>
+                                                                        <label class="form-label d-block text-center fw-bold">Age
+                                                                            <input th:name="age" min="0" max="127" th:value="${currentUser.age}" th:errorclass="fieldError" required type="number" class="form-control"></label>
+                                                                        <label class="form-label d-block text-center fw-bold">Password
+                                                                            <input th:name="password" type="text" class="form-control" th:errorclass="fieldError" required placeholder="type new password"></label>
+                                                                        <label class="form-label d-block text-center fw-bold">Role
+                                                                            <select size="2" multiple required class="form-select" aria-label="Default select" name="role">
+                                                                                <option value="ROLE_ADMIN">ADMIN</option>
+                                                                                <option value="ROLE_USER" selected="selected">USER</option>
+                                                                            </select></label>
+                                                                    </form>
+                                                                </div>
+                                                                <div class="col3"></div>
+                                                            </div>
                                                         </div>
                                                         <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary fs-5" data-bs-dismiss="modal">Close</button>
