@@ -107,7 +107,7 @@
                                                                         <label class="form-label d-block text-center fw-bold">Age
                                                                             <input th:name="age" min="0" max="127" th:value="${currentUser.age}" th:errorclass="fieldError" required type="number" class="form-control"></label>
                                                                         <label class="form-label d-block text-center fw-bold">Password
-                                                                            <input th:name="password" type="text" class="form-control" th:errorclass="fieldError" required placeholder="type new password"></label>
+                                                                            <input th:name="password" type="password" class="form-control" th:errorclass="fieldError" required placeholder="type new password"></label>
                                                                         <label class="form-label d-block text-center fw-bold">Role
                                                                             <select size="2" multiple required class="form-select" aria-label="Default select" name="role">
                                                                                 <option value="ROLE_ADMIN">ADMIN</option>
@@ -160,7 +160,7 @@
                                     <label for="saveLastName" class="form-label d-block text-center fw-bold">Last name</label>
                                     <input type="text" class="form-control" th:filed="*{lastName}" name="lastName" id="saveLastName"><br>
                                     <label for="saveAge" class="form-label d-block text-center fw-bold">Age</label>
-                                    <input type="number" class="form-control" required th:filed="*{age}" value="0" name="age" id="saveAge"><br>
+                                    <input type="number" max="127" class="form-control" required th:filed="*{age}" value="0" name="age" id="saveAge"><br>
                                     <label for="saveRole" class="form-label d-block text-center fw-bold">Roles</label>
                                     <select size="2" multiple required class="form-select" aria-label="Default select" name="role" id="saveRole">
                                         <option value="ROLE_ADMIN">ADMIN</option>
