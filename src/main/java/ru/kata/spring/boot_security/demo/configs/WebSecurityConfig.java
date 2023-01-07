@@ -7,7 +7,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.kata.spring.boot_security.demo.entities.Role;
 import ru.kata.spring.boot_security.demo.entities.User;
@@ -20,7 +19,16 @@ import java.util.HashSet;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final SuccessUserHandler successUserHandler;
 
+
+
     private UserService userService;
+
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
@@ -47,15 +55,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     // аутентификация inMemory
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setPasswordEncoder(passwordEncoder());
+        authenticationProvider.setPasswordEncoder(passwordEncoder);
         authenticationProvider.setUserDetailsService(userService);
         setupBaseAdmin();
         setupBaseUser();
@@ -65,7 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private void setupBaseAdmin() {
         User admin = new User();
         admin.setLogin("admin");
-        admin.setPassword("$2a$12$FKryineLgp9rqaWbPgzsfOB9i8pONHz10lI2XddH63fba5NwA.X3G"); //decrypt : admin
+        admin.setPassword("admin");
         admin.setEmail("admin@mail.ru");
         HashSet<Role> roles = new HashSet<>();
         roles.add(new Role("ROLE_ADMIN"));
@@ -77,7 +81,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private void setupBaseUser() {
         User user = new User();
         user.setLogin("user");
-        user.setPassword("$2a$12$H.yw8MmZLJrWylntiqPWu.sKu0TWAbNJyb0R38iwZeOARyrvrOj6q"); //decrypt : user
+        user.setPassword("user");
         user.setEmail("user@mail.ru");
         HashSet<Role> roles = new HashSet<>();
         roles.add(new Role("ROLE_USER"));

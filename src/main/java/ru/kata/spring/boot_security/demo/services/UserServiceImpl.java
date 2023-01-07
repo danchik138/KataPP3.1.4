@@ -4,8 +4,8 @@ import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.kata.spring.boot_security.demo.Repositories.RoleRepository;
 import ru.kata.spring.boot_security.demo.Repositories.UserRepository;
 import ru.kata.spring.boot_security.demo.entities.User;
 
@@ -15,11 +15,19 @@ import java.util.List;
 public class UserServiceImpl implements UserService{
     private UserRepository userRepository;
 
-    private RoleRepository roleRepository;
+    private RoleService roleService;
+
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public void setRoleRepository(RoleRepository roleRepository) {
-        this.roleRepository = roleRepository;
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
+
+    @Autowired
+    public void setRoleService(RoleService roleService) {
+        this.roleService = roleService;
     }
 
     @Autowired
@@ -69,14 +77,23 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void saveUser(User user) {
-        roleRepository.saveAll(user.getRoles());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        roleService.saveOrUpdateRoles(user.getRoles());
         userRepository.save(user);
     }
 
     @Override
     public void updateUser(User user) {
         if (userRepository.existsById(user.getId())) {
-            saveUser(user);
+            if (user.getPassword() == null || user.getPassword().equals("")) {
+                user.setPassword(
+                        getUserById(user.getId()).getPassword()
+                );
+            } else {
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+            }
+            roleService.saveOrUpdateRoles(user.getRoles());
+            userRepository.save(user);
         }
     }
 

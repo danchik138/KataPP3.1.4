@@ -14,7 +14,7 @@ public class Role implements GrantedAuthority {
     @Column(name = "id")
     private long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
     @Override
     public String getAuthority() {
@@ -28,6 +28,9 @@ public class Role implements GrantedAuthority {
     public void setId(long id) {
         this.id = id;
     }
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getName() {
         return name;
@@ -39,10 +42,6 @@ public class Role implements GrantedAuthority {
         } else {
             return "no_role";
         }
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Role() {

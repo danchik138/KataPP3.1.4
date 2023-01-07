@@ -2,26 +2,24 @@ package ru.kata.spring.boot_security.demo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.entities.Role;
 import ru.kata.spring.boot_security.demo.entities.User;
+import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
-import java.util.*;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
     private UserService userService;
 
-    private PasswordEncoder passwordEncoder;
+    private RoleService roleService;
 
     @Autowired
-    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
+    public void setRoleService(RoleService roleService) {
+        this.roleService = roleService;
     }
 
     @Autowired
@@ -36,7 +34,7 @@ public class AdminController {
         User current = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         model.addAttribute("currentUser", current);
         model.addAttribute("user", user);
-        model.addAttribute("ids", userService.getAllIds());
+        model.addAttribute("roles", roleService.getAllRolesList());
         return "admin/main";
     }
 
@@ -57,18 +55,13 @@ public class AdminController {
     }
 
     @PostMapping("/create")
-    public String createUser(@ModelAttribute("user") User user, @RequestParam("role") String role) {
-        user.setRoles(createRoles(role));
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+    public String createUser(@ModelAttribute("user") User user) {
         userService.saveUser(user);
         return "redirect:/admin";
     }
 
     @PatchMapping("/update")
-    public String updateUser(@ModelAttribute("user") User user, @RequestParam("role") String role) {
-        user.setRoles(createRoles(role));
-        System.out.println(user);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+    public String updateUser(@ModelAttribute("user") User user) {
         userService.updateUser(user);
         if (((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId()==user.getId()) {
             SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
@@ -76,12 +69,4 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    Collection<Role> createRoles(String role) {
-        List<Role> roles = new ArrayList<>();
-        roles.add(new Role("ROLE_USER"));
-        if (role.equals("ROLE_ADMIN")) {
-            roles.add(new Role("ROLE_ADMIN"));
-        }
-        return roles;
-    }
 }

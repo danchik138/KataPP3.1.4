@@ -26,9 +26,12 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-2 nav flex-column nav-pills my-2" aria-orientation="vertical">
-            <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">User</a>
-              </li>
+            <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                <a class="nav-link" aria-current="page" href="../admin">Admin</a>
+            </li>
+            <li class="nav-item" sec:authorize="hasRole('USER')">
+                <a class="nav-link active" href="../user">User</a>
+            </li>
         </div>
         <div class="col">
             <h1>User information-page</h1>
